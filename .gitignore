@@ -50,6 +50,22 @@ Thumbs.db
 
 # Logs
 *.log
+update_log.txt
 
-# Keep scraped_jobs.json in repo for initial deployment
-# scraped_jobs.json
+# ===================================
+# SCRAPER FILES (Keep Local Only)
+# ===================================
+# These run on your PC, not on Render
+spiders/
+run_all_spiders.py
+run_scrapers.py
+scrapy_settings.py
+auto_update_*.bat
+scrape_jobs.bat
+update_jobs.bat
+start_server.bat
+HOW_TO_RUN_SPIDERS.md
+AUTO_UPDATE_GUIDE.md
+
+# Keep scraped_jobs.json - Render needs this data file
+# !scraped_jobs.json
