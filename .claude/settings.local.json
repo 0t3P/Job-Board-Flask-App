@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(scrapy runspider:*)"
+      "Bash(scrapy runspider:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git push:*)",
+      "Bash(git remote remove:*)",
+      "Bash(git remote add:*)",
+      "Bash(git --version:*)",
+      "Bash(gh:*)"
     ]
   }
 }
