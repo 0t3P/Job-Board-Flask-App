@@ -33,6 +33,63 @@ TYPE_KEYWORDS = {
 }
 
 
+_SALARY_NUM_RE = re.compile(r'[\$]?\s*([\d,]+(?:\.\d+)?)')
+
+# Salary range brackets (monthly USD estimates)
+SALARY_RANGES = {
+    'under500': (0, 500),
+    '500to1000': (500, 1000),
+    '1000to2000': (1000, 2000),
+    '2000to5000': (2000, 5000),
+    '5000plus': (5000, float('inf')),
+}
+
+
+def parse_salary_monthly(job):
+    """Extract a monthly USD estimate from salary string. Returns None if unparseable."""
+    raw = (job.get('salary') or '').strip()
+    if not raw:
+        return None
+    low = raw.lower()
+
+    # Skip non-numeric salaries
+    if low in ('tbd', 'n/a', 'doe', 'any', 'negotiable', 'project-based') or 'based on' in low or 'competitive' in low:
+        return None
+
+    # Find all numbers
+    nums = []
+    for n in _SALARY_NUM_RE.findall(raw):
+        n = n.replace(',', '').strip()
+        if n:
+            try:
+                nums.append(float(n))
+            except ValueError:
+                continue
+    if not nums:
+        return None
+
+    # Use the average if there's a range
+    avg = sum(nums) / len(nums)
+
+    # Detect period and normalize to monthly
+    if any(kw in low for kw in ('/hr', '/hour', 'per hour', 'hourly', 'hour')):
+        return avg * 160  # ~40hrs/week * 4 weeks
+    elif any(kw in low for kw in ('/yr', '/year', 'annual', 'yearly')):
+        return avg / 12
+    elif any(kw in low for kw in ('/w', '/week', 'weekly', 'per week')):
+        return avg * 4
+    elif any(kw in low for kw in ('/mo', '/month', 'monthly', 'per month')):
+        return avg
+
+    # Guess based on magnitude
+    if avg > 10000:
+        return avg / 12  # Likely annual
+    elif avg < 50:
+        return avg * 160  # Likely hourly
+    else:
+        return avg  # Assume monthly
+
+
 def detect_arrangement(job):
     """Detect work arrangement from job fields."""
     text = ' '.join([
@@ -90,6 +147,7 @@ def load_jobs():
                 job['_arrangement'] = detect_arrangement(job)
                 job['_job_type'] = detect_job_type(job)
                 job['_parsed_date'] = parse_date(job)
+                job['_salary_monthly'] = parse_salary_monthly(job)
             return jobs
     except FileNotFoundError:
         return []
@@ -142,7 +200,8 @@ def normalize_job_text(job):
 
 
 def apply_filters(jobs, source_filter='', category_filter='', search_query='',
-                  arrangement_filter='', job_type_filter='', sort_by=''):
+                  arrangement_filter='', job_type_filter='', sort_by='',
+                  salary_filter=''):
     """Apply all filters and sorting to a job list."""
     filtered = jobs
 
@@ -158,6 +217,11 @@ def apply_filters(jobs, source_filter='', category_filter='', search_query='',
 
     if job_type_filter:
         filtered = [j for j in filtered if j.get('_job_type') == job_type_filter]
+
+    if salary_filter and salary_filter in SALARY_RANGES:
+        lo, hi = SALARY_RANGES[salary_filter]
+        filtered = [j for j in filtered
+                    if j.get('_salary_monthly') is not None and lo <= j['_salary_monthly'] < hi]
 
     if search_query:
         q = search_query.lower()
@@ -185,10 +249,11 @@ def index():
     search_query = request.args.get('search', '')
     arrangement_filter = request.args.get('arrangement', '')
     job_type_filter = request.args.get('job_type', '')
+    salary_filter = request.args.get('salary', '')
     sort_by = request.args.get('sort', '')
 
     filtered_jobs = apply_filters(jobs, source_filter, category_filter, search_query,
-                                  arrangement_filter, job_type_filter, sort_by)
+                                  arrangement_filter, job_type_filter, sort_by, salary_filter)
 
     # Pagination
     total_filtered = len(filtered_jobs)
@@ -212,6 +277,7 @@ def index():
                          search_query=search_query,
                          current_arrangement=arrangement_filter,
                          current_job_type=job_type_filter,
+                         current_salary=salary_filter,
                          current_sort=sort_by,
                          current_page=current_page,
                          total_pages=total_pages)
@@ -248,6 +314,7 @@ def api_jobs():
         arrangement_filter=request.args.get('arrangement', ''),
         job_type_filter=request.args.get('job_type', ''),
         sort_by=request.args.get('sort', ''),
+        salary_filter=request.args.get('salary', ''),
     )
 
     return jsonify({
