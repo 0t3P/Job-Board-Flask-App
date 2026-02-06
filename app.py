@@ -143,6 +143,15 @@ def job_detail(job_id):
         return "Job not found", 404
 
 
+@app.route('/api/job/<int:job_id>')
+def api_job_detail(job_id):
+    """API endpoint to get a single job as JSON"""
+    jobs = load_jobs()
+    if 0 <= job_id < len(jobs):
+        return jsonify(jobs[job_id])
+    return jsonify({'error': 'Job not found'}), 404
+
+
 @app.route('/api/jobs')
 def api_jobs():
     """API endpoint to get jobs as JSON"""
@@ -177,7 +186,13 @@ def api_jobs():
 @app.route('/refresh')
 def refresh():
     """Information page about refreshing jobs"""
-    return render_template('refresh.html')
+    import os
+    last_updated = None
+    if JOBS_FILE.exists():
+        mod_time = os.path.getmtime(JOBS_FILE)
+        last_updated = datetime.fromtimestamp(mod_time).strftime('%B %d, %Y at %I:%M %p')
+    jobs = load_jobs()
+    return render_template('refresh.html', last_updated=last_updated, total_jobs=len(jobs))
 
 
 @app.template_filter('truncate_words')

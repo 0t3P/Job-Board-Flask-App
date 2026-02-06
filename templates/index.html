@@ -147,9 +147,9 @@
                     </p>
 
                     <div class="d-flex gap-2 flex-wrap">
-                        <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-outline-primary btn-sm">
+                        <button class="btn btn-outline-primary btn-sm view-details-btn" data-job-id="{{ job.id }}">
                             <i class="fas fa-eye me-1"></i>View Details
-                        </a>
+                        </button>
                         {% if job.url %}
                         <a href="{{ job.url }}" target="_blank" rel="noopener" class="btn btn-success btn-sm">
                             <i class="fas fa-external-link-alt me-1"></i>Apply
@@ -205,6 +205,34 @@
     </div>
     {% endif %}
 </div>
+
+<!-- Job Detail Modal -->
+<div class="modal fade" id="jobModal" tabindex="-1" aria-labelledby="jobModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="jobModalLabel">Job Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="jobModalBody">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="modalApplyBtn" target="_blank" rel="noopener" class="btn btn-success d-none">
+                    <i class="fas fa-external-link-alt me-1"></i>Apply for this Job
+                </a>
+                <a href="#" id="modalFullPageBtn" class="btn btn-outline-primary">
+                    <i class="fas fa-expand me-1"></i>Full Page
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -218,7 +246,49 @@
             }
         });
     }, { threshold: 0.05 });
-
     document.querySelectorAll('.job-item').forEach(el => observer.observe(el));
+
+    // Job detail modal
+    const jobModal = new bootstrap.Modal(document.getElementById('jobModal'));
+    const modalBody = document.getElementById('jobModalBody');
+    const modalLabel = document.getElementById('jobModalLabel');
+    const modalApplyBtn = document.getElementById('modalApplyBtn');
+    const modalFullPageBtn = document.getElementById('modalFullPageBtn');
+    const spinner = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.view-details-btn');
+        if (!btn) return;
+        const jobId = btn.dataset.jobId;
+        modalBody.innerHTML = spinner;
+        modalLabel.textContent = 'Loading...';
+        modalApplyBtn.classList.add('d-none');
+        modalFullPageBtn.href = '/job/' + jobId;
+        jobModal.show();
+
+        fetch('/api/job/' + jobId)
+            .then(r => r.json())
+            .then(job => {
+                modalLabel.textContent = job.title || 'Untitled Job';
+                let meta = '';
+                if (job.company) meta += '<span class="badge bg-light text-dark border me-2 mb-2"><i class="fas fa-building me-1"></i>' + job.company + '</span>';
+                if (job.location) meta += '<span class="badge bg-light text-dark border me-2 mb-2"><i class="fas fa-map-marker-alt me-1"></i>' + job.location + '</span>';
+                if (job.salary) meta += '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle me-2 mb-2"><i class="fas fa-dollar-sign me-1"></i>' + job.salary + '</span>';
+                if (job.type) meta += '<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle me-2 mb-2"><i class="fas fa-clock me-1"></i>' + job.type + '</span>';
+                if (job.category) meta += '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle me-2 mb-2"><i class="fas fa-tag me-1"></i>' + job.category + '</span>';
+                if (job.source) meta += '<span class="badge source-badge rounded-pill me-2 mb-2">' + job.source + '</span>';
+
+                const desc = job.job_description || job.description || '<p class="text-muted fst-italic">No description available.</p>';
+                modalBody.innerHTML = '<div class="mb-3">' + meta + '</div><hr><div class="description-content">' + desc.replace(/\n/g, '<br>') + '</div>';
+
+                if (job.url) {
+                    modalApplyBtn.href = job.url;
+                    modalApplyBtn.classList.remove('d-none');
+                }
+            })
+            .catch(() => {
+                modalBody.innerHTML = '<div class="text-center py-4 text-danger"><i class="fas fa-exclamation-triangle fa-2x mb-2"></i><p>Failed to load job details.</p></div>';
+            });
+    });
 </script>
 {% endblock %}
