@@ -4,6 +4,7 @@ Flask Job Board - Display scraped jobs from multiple sources
 from flask import Flask, render_template, request, jsonify
 import json
 import re
+import math
 from html import unescape
 from pathlib import Path
 from datetime import datetime
@@ -12,6 +13,8 @@ app = Flask(__name__)
 
 # Path to scraped jobs JSON (inside jobs_flask folder)
 JOBS_FILE = Path(__file__).parent / 'scraped_jobs.json'
+
+JOBS_PER_PAGE = 20
 
 
 def load_jobs():
@@ -77,7 +80,7 @@ def normalize_job_text(job):
 
 @app.route('/')
 def index():
-    """Main page - display all jobs with filters"""
+    """Main page - display all jobs with filters and pagination"""
     jobs = load_jobs()
 
     # Get filter parameters
@@ -96,25 +99,36 @@ def index():
                         if job.get('category', '') == category_filter or job.get('type', '') == category_filter]
 
     if search_query:
-        search_query = search_query.lower()
+        search_lower = search_query.lower()
         filtered_jobs = [job for job in filtered_jobs
-                        if search_query in (job.get('title') or '').lower()
-                        or search_query in (job.get('description') or '').lower()
-                        or search_query in (job.get('job_description') or '').lower()]
+                        if search_lower in (job.get('title') or '').lower()
+                        or search_lower in (job.get('description') or '').lower()
+                        or search_lower in (job.get('job_description') or '').lower()]
+
+    # Pagination
+    total_filtered = len(filtered_jobs)
+    total_pages = max(1, math.ceil(total_filtered / JOBS_PER_PAGE))
+    current_page = request.args.get('page', 1, type=int)
+    current_page = max(1, min(current_page, total_pages))
+    start = (current_page - 1) * JOBS_PER_PAGE
+    end = start + JOBS_PER_PAGE
+    paginated_jobs = filtered_jobs[start:end]
 
     # Get filter options
     sources = get_unique_sources(jobs)
     categories = get_unique_categories(jobs)
 
     return render_template('index.html',
-                         jobs=filtered_jobs,
+                         jobs=paginated_jobs,
                          total_jobs=len(jobs),
-                         filtered_count=len(filtered_jobs),
+                         filtered_count=total_filtered,
                          sources=sources,
                          categories=categories,
                          current_source=source_filter,
                          current_category=category_filter,
-                         search_query=search_query)
+                         search_query=search_query,
+                         current_page=current_page,
+                         total_pages=total_pages)
 
 
 @app.route('/job/<int:job_id>')

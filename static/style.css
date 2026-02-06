@@ -1,800 +1,293 @@
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ===== Custom Styles (Bootstrap 5 Complement) ===== */
+
+/* CSS Variables for theming */
+:root {
+    --primary-custom: #0d6efd;
+    --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.25s;
 }
 
+[data-bs-theme="dark"] {
+    --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Body */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f5f7fa;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Navigation */
-.navbar {
-    background-color: #2c3e50;
-    color: white;
-    padding: 1rem 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-brand a {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-}
-
-.nav-menu {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.nav-menu a {
-    color: white;
-    text-decoration: none;
-    transition: opacity 0.3s;
-}
-
-.nav-menu a:hover {
-    opacity: 0.8;
-}
-
-/* Main Content */
-.main-content {
-    min-height: calc(100vh - 200px);
-    padding: 2rem 0;
-}
-
-/* Header Section */
-.header-section {
-    margin-bottom: 2rem;
-}
-
-.header-section h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-}
-
-.job-count {
-    color: #7f8c8d;
-    font-size: 1.1rem;
-}
-
-/* Filters Section */
-.filters-section {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
-.filters-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    align-items: end;
-}
-
-.filter-group {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.filter-group label {
+.main-content {
+    flex: 1;
+    min-height: calc(100vh - 160px);
+}
+
+/* Navbar enhancements */
+.navbar {
+    transition: background-color var(--transition-speed);
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color var(--transition-speed), transform var(--transition-speed);
+}
+
+.nav-link:hover {
+    transform: translateY(-1px);
+}
+
+/* Source badge color coding */
+.source-badge {
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    color: white;
     font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
 }
 
-.filter-group input,
-.filter-group select {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
+/* Filter card */
+.filter-card {
+    border-top: 3px solid var(--primary-custom);
 }
 
-.filter-group input:focus,
-.filter-group select:focus {
-    outline: none;
-    border-color: #3498db;
-}
-
-/* Buttons */
-.btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-    text-align: center;
-}
-
-.btn-primary {
-    background-color: #3498db;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #2980b9;
-}
-
-.btn-secondary {
-    background-color: #95a5a6;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #7f8c8d;
-}
-
-.btn-small {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-}
-
-.btn-external {
-    background-color: #27ae60;
-    color: white;
-}
-
-.btn-external:hover {
-    background-color: #229954;
-}
-
-/* Jobs Container */
-.jobs-container {
-    display: grid;
-    gap: 1.5rem;
-}
-
-/* Job Card */
+/* Job cards */
 .job-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    border-left: 3px solid transparent;
 }
 
 .job-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+    box-shadow: var(--card-hover-shadow);
+    border-left-color: var(--primary-custom);
 }
 
-.job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 1rem;
-    gap: 1rem;
-}
-
-.job-title {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin: 0;
-    flex: 1;
-}
-
-.job-title a {
-    color: #2c3e50;
-    text-decoration: none;
-}
-
-.job-title a:hover {
-    color: #3498db;
-}
-
-.badge {
-    background-color: #3498db;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
+.job-title-link {
+    color: var(--bs-body-color);
     font-weight: 600;
-    white-space: nowrap;
+    transition: color var(--transition-speed);
 }
 
-.badge-large {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+.job-title-link:hover {
+    color: var(--primary-custom);
 }
 
-.job-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #ecf0f1;
+/* Job meta pills */
+.job-meta-pills .badge {
+    font-weight: 500;
+    font-size: 0.78rem;
+    padding: 0.4em 0.7em;
 }
 
-.meta-item {
-    font-size: 0.9rem;
-    color: #7f8c8d;
+/* Description text */
+.job-description-text {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.meta-item strong {
-    color: #2c3e50;
-}
-
-.job-description {
-    color: #555;
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-.job-footer {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-/* No Jobs Message */
-.no-jobs {
-    background: white;
-    padding: 3rem;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.no-jobs h2 {
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
-.no-jobs p {
-    color: #7f8c8d;
-    margin-bottom: 1.5rem;
-}
-
-/* Job Detail Page */
-.breadcrumb {
-    margin-bottom: 1.5rem;
-    color: #7f8c8d;
-}
-
-.breadcrumb a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-.breadcrumb a:hover {
-    text-decoration: underline;
-}
-
-.job-detail {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.job-detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 2rem;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #ecf0f1;
-}
-
-.job-detail-header h1 {
-    font-size: 2rem;
-    color: #2c3e50;
-    flex: 1;
-}
-
-.job-detail-meta {
-    margin-bottom: 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-}
-
-.meta-row {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.meta-label {
-    font-weight: 600;
-    color: #2c3e50;
-    min-width: 100px;
-}
-
-.meta-value {
-    color: #555;
-}
-
-.job-detail-description {
-    margin-bottom: 2rem;
-}
-
-.job-detail-description h2 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
+/* Description content on detail page */
 .description-content {
-    color: #555;
     line-height: 1.8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-.job-detail-actions {
+.description-content p {
+    margin-bottom: 0.75rem;
+}
+
+.description-content ul,
+.description-content ol {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+}
+
+.description-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Scroll-triggered animations */
+.job-item {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.job-item.fade-in-up {
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Back to top button */
+#backToTop {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1050;
+    width: 48px;
+    height: 48px;
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
 }
 
-/* Info Page */
-.info-page {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+#backToTop:hover {
+    transform: translateY(-3px);
 }
 
-.info-page h1 {
-    font-size: 2rem;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-}
-
-.info-section {
-    margin-bottom: 2rem;
-}
-
-.info-section h2 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-}
-
-.info-section h3 {
-    font-size: 1.2rem;
-    color: #34495e;
-    margin-bottom: 0.5rem;
-}
-
-.code-block {
-    background: #f8f9fa;
-    border-left: 4px solid #3498db;
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
-
-.code-block pre {
-    margin: 0;
-    overflow-x: auto;
-}
-
-.code-block code {
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    color: #2c3e50;
-}
-
-.scraper-list {
-    list-style-position: inside;
-    color: #555;
-}
-
-.scraper-list li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #ecf0f1;
-}
-
-.scraper-list li:last-child {
-    border-bottom: none;
-}
-
-.actions {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 2px solid #ecf0f1;
-}
-
-/* Footer */
-.footer {
-    background-color: #2c3e50;
-    color: white;
+/* Pagination custom */
+.pagination .page-link {
+    min-width: 42px;
     text-align: center;
-    padding: 2rem 0;
-    margin-top: 3rem;
+    border-radius: 6px;
+    margin: 0 2px;
+    font-weight: 500;
 }
 
-.footer p {
-    margin: 0.5rem 0;
+/* Breadcrumb */
+.breadcrumb {
+    background: none;
+    padding: 0;
 }
 
-.footer-small {
-    font-size: 0.9rem;
-    opacity: 0.8;
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "\f105";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.75rem;
 }
 
-/* Responsive Design */
-
-/* Tablets and Small Laptops */
-@media (max-width: 1024px) {
-    .container {
-        padding: 0 15px;
-    }
-
-    .header-section h1 {
-        font-size: 2.2rem;
-    }
-
-    .job-detail {
-        padding: 1.5rem;
-    }
+/* Accordion styling */
+.accordion-button:focus {
+    box-shadow: none;
 }
+
+.accordion-body pre {
+    margin: 0;
+}
+
+/* ===== Responsive Enhancements ===== */
 
 /* Tablets */
-@media (max-width: 768px) {
-    .navbar .container {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+@media (max-width: 991.98px) {
+    .sticky-lg-top {
+        position: static !important;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 767.98px) {
+    .display-6 {
+        font-size: 1.6rem;
     }
 
-    .nav-menu {
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
+    .form-control-lg,
+    .form-select-lg {
+        font-size: 1rem;
+        padding: 0.65rem 0.85rem;
     }
 
-    .header-section h1 {
-        font-size: 1.8rem;
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.65rem 1rem;
     }
 
-    .filters-form {
-        grid-template-columns: 1fr;
+    .job-meta-pills .badge {
+        font-size: 0.75rem;
     }
 
-    .filters-section {
+    .card-body {
         padding: 1rem;
     }
 
-    .job-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .job-title {
-        font-size: 1.3rem;
-    }
-
-    .job-detail-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .job-detail-header h1 {
-        font-size: 1.5rem;
-    }
-
-    .job-detail-meta {
-        grid-template-columns: 1fr;
-    }
-
-    .job-meta {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .btn {
-        width: 100%;
+    /* Full-width buttons on mobile */
+    .job-card .d-flex.gap-2 .btn {
+        flex: 1;
         text-align: center;
-    }
-
-    .job-footer {
-        flex-direction: column;
-    }
-
-    .job-detail-actions {
-        flex-direction: column;
     }
 }
 
-/* Mobile Phones - Improved for better readability and touch */
-@media (max-width: 480px) {
-    body {
-        font-size: 16px; /* Increased from 14px for better readability */
-    }
-
+/* Small phones */
+@media (max-width: 479.98px) {
     .container {
-        padding: 0 12px;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
-    .navbar {
-        padding: 1rem 0;
-    }
-
-    .nav-brand a {
-        font-size: 1.4rem;
-    }
-
-    .nav-menu {
-        gap: 1.5rem;
-        font-size: 1rem;
-    }
-
-    .main-content {
-        padding: 1.25rem 0;
-    }
-
-    .header-section h1 {
-        font-size: 1.75rem; /* Larger for better visibility */
-    }
-
-    .job-count {
-        font-size: 1.1rem;
-    }
-
-    .filters-section {
-        padding: 1.25rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .filter-group {
-        margin-bottom: 0.5rem;
-    }
-
-    .filter-group label {
-        font-size: 1.05rem; /* Larger labels */
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-    }
-
-    .filter-group input,
-    .filter-group select {
-        padding: 1rem; /* Much larger for easier touch */
-        font-size: 1.05rem; /* Bigger text */
-        min-height: 50px; /* Touch-friendly height */
-        border: 2px solid #ddd; /* Thicker border */
-    }
-
-    .job-card {
-        padding: 1.25rem;
-        margin-bottom: 1rem;
-    }
-
-    .job-title {
-        font-size: 1.3rem; /* Larger job titles */
-        line-height: 1.4;
+    .display-6 {
+        font-size: 1.35rem;
     }
 
     .badge {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.7rem;
     }
 
-    .meta-item {
-        font-size: 0.95rem; /* Larger meta text */
-    }
-
-    .job-description {
-        font-size: 1rem; /* Increased for readability */
-        line-height: 1.6;
-    }
-
-    .btn, button {
-        min-height: 52px; /* Even larger touch target */
-        padding: 0.9rem 1.2rem;
-        font-size: 1.05rem; /* Larger button text */
-        font-weight: 600;
-    }
-
-    .btn-small {
-        min-height: 48px;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-    }
-
-    .job-detail {
-        padding: 1.25rem;
-    }
-
-    .job-detail-header h1 {
-        font-size: 1.5rem;
-    }
-
-    .meta-label {
-        min-width: 90px;
-        font-size: 1rem;
-    }
-
-    .meta-value {
-        font-size: 1rem;
-    }
-
-    .job-detail-description h2 {
-        font-size: 1.35rem;
-    }
-
-    .description-content {
-        font-size: 1rem;
-        line-height: 1.7;
-    }
-
-    .footer {
-        padding: 1.75rem 0;
-        font-size: 1rem;
-    }
-
-    .no-jobs {
-        padding: 2.5rem 1.25rem;
-    }
-
-    .no-jobs h2 {
-        font-size: 1.5rem;
-    }
-
-    .no-jobs p {
-        font-size: 1.05rem;
-    }
-
-    .info-page {
-        padding: 1.25rem;
-    }
-
-    .info-page h1 {
-        font-size: 1.65rem;
-    }
-
-    .info-section h2 {
-        font-size: 1.35rem;
-    }
-
-    .code-block {
-        padding: 1rem;
-        font-size: 0.9rem;
+    #backToTop {
+        bottom: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
     }
 }
 
-/* Small Mobile Phones - Ensure everything is still touch-friendly */
-@media (max-width: 375px) {
-    body {
-        font-size: 15px; /* Still readable on smaller screens */
-    }
-
-    .btn, button {
-        min-height: 50px; /* Maintain large touch target */
-        padding: 0.85rem;
-        font-size: 1rem;
-    }
-
-    .filters-section {
-        padding: 1rem;
-    }
-
-    .header-section h1 {
-        font-size: 1.5rem;
-    }
-
-    .job-title {
-        font-size: 1.2rem;
-    }
-
-    .filter-group input,
-    .filter-group select {
-        font-size: 1rem;
-        padding: 0.95rem;
-    }
-}
-
-/* Touch-friendly improvements for all mobile */
-@media (max-width: 768px) {
-    /* Larger touch targets */
-    .btn, button {
-        min-height: 52px; /* Increased for better touch */
-        padding: 1rem 1.25rem;
-        font-size: 1.05rem;
-        font-weight: 600;
-        display: block;
-        text-align: center;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        border-radius: 8px; /* Slightly more rounded */
-    }
-
-    .btn-small {
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
         min-height: 48px;
-        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* Links as buttons */
-    a.btn {
-        min-height: 52px;
+    .form-control,
+    .form-select {
+        min-height: 48px;
+    }
+
+    .page-link {
+        min-height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    footer,
+    #backToTop,
+    #themeToggle,
+    .filter-card,
+    .pagination {
+        display: none !important;
     }
 
-    /* Better spacing for touch */
     .job-card {
-        margin-bottom: 1rem; /* Increased spacing */
-    }
-
-    .job-footer {
-        gap: 0.75rem; /* More space between buttons */
-    }
-
-    /* Prevent text selection on double-tap */
-    .job-card,
-    .btn {
-        -webkit-tap-highlight-color: rgba(52, 152, 219, 0.2);
-        -webkit-touch-callout: none;
-        user-select: none;
-    }
-
-    /* Allow text selection in descriptions */
-    .job-description,
-    .description-content,
-    .job-title {
-        user-select: text;
-        -webkit-user-select: text;
-    }
-
-    /* Fix filter buttons specifically */
-    .filter-group:last-child {
-        margin-top: 0.5rem;
-    }
-
-    .filters-form .btn {
-        margin-top: 0.5rem;
-    }
-
-    /* Better input/select styling for mobile */
-    .filter-group input,
-    .filter-group select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border-radius: 8px;
-    }
-
-    /* Add dropdown arrow for selects */
-    .filter-group select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        padding-right: 2.5rem;
-    }
-
-    /* Improved job meta layout */
-    .job-meta {
-        gap: 0.75rem;
-    }
-
-    .meta-item {
-        line-height: 1.5;
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
     }
 }

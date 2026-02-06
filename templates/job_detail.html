@@ -4,85 +4,141 @@
 
 {% block content %}
 <div class="container">
-    <div class="breadcrumb">
-        <a href="/">All Jobs</a> / <span>{{ job.title or 'Job Details' }}</span>
-    </div>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home me-1"></i>All Jobs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ (job.title or 'Job Details') | truncate_words(8) }}</li>
+        </ol>
+    </nav>
 
-    <div class="job-detail">
-        <div class="job-detail-header">
-            <h1>{{ job.title or 'Untitled Job' }}</h1>
-            <span class="job-source badge-large">{{ job.source or 'Unknown Source' }}</span>
-        </div>
+    <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                        <h1 class="h2 fw-bold mb-0">{{ job.title or 'Untitled Job' }}</h1>
+                        <span class="badge source-badge rounded-pill fs-6">{{ job.source or 'Unknown Source' }}</span>
+                    </div>
 
-        <div class="job-detail-meta">
-            {% if job.company %}
-            <div class="meta-row">
-                <span class="meta-label">Company:</span>
-                <span class="meta-value">{{ job.company }}</span>
-            </div>
-            {% endif %}
+                    <hr>
 
-            {% if job.location %}
-            <div class="meta-row">
-                <span class="meta-label">Location:</span>
-                <span class="meta-value">{{ job.location }}</span>
-            </div>
-            {% endif %}
-
-            {% if job.salary %}
-            <div class="meta-row">
-                <span class="meta-label">Salary:</span>
-                <span class="meta-value">{{ job.salary }}</span>
-            </div>
-            {% endif %}
-
-            {% if job.type %}
-            <div class="meta-row">
-                <span class="meta-label">Job Type:</span>
-                <span class="meta-value">{{ job.type }}</span>
-            </div>
-            {% endif %}
-
-            {% if job.category %}
-            <div class="meta-row">
-                <span class="meta-label">Category:</span>
-                <span class="meta-value">{{ job.category }}</span>
-            </div>
-            {% endif %}
-
-            {% if job.posted_date or job.date_posted %}
-            <div class="meta-row">
-                <span class="meta-label">Posted:</span>
-                <span class="meta-value">{{ job.posted_date or job.date_posted }}</span>
-            </div>
-            {% endif %}
-
-            {% if job.scraped_at %}
-            <div class="meta-row">
-                <span class="meta-label">Scraped:</span>
-                <span class="meta-value">{{ job.scraped_at }}</span>
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="job-detail-description">
-            <h2>Job Description</h2>
-            <div class="description-content">
-                {% if job.job_description %}
-                    {{ job.job_description | replace('\n', '<br>') | safe }}
-                {% elif job.description %}
-                    {{ job.description | replace('\n', '<br>') | safe }}
-                {% else %}
-                    <p>No description available.</p>
-                {% endif %}
+                    <h5 class="fw-semibold mb-3"><i class="fas fa-file-alt me-2 text-primary"></i>Job Description</h5>
+                    <div class="description-content">
+                        {% if job.job_description %}
+                            {{ job.job_description | replace('\n', '<br>') | safe }}
+                        {% elif job.description %}
+                            {{ job.description | replace('\n', '<br>') | safe }}
+                        {% else %}
+                            <p class="text-muted fst-italic">No description available.</p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="job-detail-actions">
-            <a href="/" class="btn btn-secondary">Back to Jobs</a>
-            {% if job.url %}
-            <a href="{{ job.url }}" target="_blank" class="btn btn-primary">Apply for this Job</a>
-            {% endif %}
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Job Info Card -->
+            <div class="card shadow-sm border-0 mb-3 sticky-lg-top" style="top: 80px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Job Details</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% if job.company %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-building text-muted me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Company</small>
+                                    <span class="fw-semibold">{{ job.company }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if job.location %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt text-muted me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Location</small>
+                                    <span class="fw-semibold">{{ job.location }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if job.salary %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-dollar-sign text-success me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Salary</small>
+                                    <span class="fw-semibold text-success">{{ job.salary }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if job.type %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-clock text-info me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Job Type</small>
+                                    <span class="fw-semibold">{{ job.type }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if job.category %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-tags text-warning me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Category</small>
+                                    <span class="fw-semibold">{{ job.category }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if job.posted_date or job.date_posted %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar text-secondary me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Posted</small>
+                                    <span class="fw-semibold">{{ job.posted_date or job.date_posted }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if job.scraped_at %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-robot text-secondary me-3" style="width:20px"></i>
+                                <div>
+                                    <small class="text-muted d-block">Scraped</small>
+                                    <span>{{ job.scraped_at }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent p-3">
+                    <div class="d-grid gap-2">
+                        {% if job.url %}
+                        <a href="{{ job.url }}" target="_blank" rel="noopener" class="btn btn-success btn-lg">
+                            <i class="fas fa-external-link-alt me-2"></i>Apply for this Job
+                        </a>
+                        {% endif %}
+                        <a href="/" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Jobs
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -4,71 +4,158 @@
 
 {% block content %}
 <div class="container">
-    <div class="info-page">
-        <h1>Refresh Jobs Data</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-sync-alt me-2"></i>Refresh Jobs Data</h3>
+                </div>
+                <div class="card-body p-4">
+                    <!-- How to Update -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold"><i class="fas fa-cogs me-2 text-primary"></i>How to Update Jobs</h5>
+                        <p class="text-muted">The job listings are scraped from various websites. To refresh the data, run the scraper script.</p>
+                    </div>
 
-        <div class="info-section">
-            <h2>How to Update Jobs</h2>
-            <p>The job listings are scraped from various websites. To refresh the data, you need to run the scraper script.</p>
-
-            <div class="code-block">
-                <h3>Option 1: Run All Scrapers (Default)</h3>
-                <pre><code>cd C:\Python\desktop_python_files\other_script\mobile
+                    <!-- Accordion for Options -->
+                    <div class="accordion mb-4" id="scraperOptions">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#option1">
+                                    <i class="fas fa-play-circle me-2 text-success"></i>Option 1: Run All Scrapers (Default)
+                                </button>
+                            </h2>
+                            <div id="option1" class="accordion-collapse collapse show" data-bs-parent="#scraperOptions">
+                                <div class="accordion-body">
+                                    <pre class="bg-dark text-light p-3 rounded"><code>cd C:\Python\desktop_python_files\other_script\mobile
 python run_scrapers.py</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#option2">
+                                    <i class="fas fa-list me-2 text-info"></i>Option 2: Run Specific Scrapers
+                                </button>
+                            </h2>
+                            <div id="option2" class="accordion-collapse collapse" data-bs-parent="#scraperOptions">
+                                <div class="accordion-body">
+                                    <pre class="bg-dark text-light p-3 rounded"><code>python run_scrapers.py --spiders onlinejobs remoteok freelancer</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#option3">
+                                    <i class="fas fa-globe me-2 text-warning"></i>Option 3: Run All Available Scrapers
+                                </button>
+                            </h2>
+                            <div id="option3" class="accordion-collapse collapse" data-bs-parent="#scraperOptions">
+                                <div class="accordion-body">
+                                    <pre class="bg-dark text-light p-3 rounded"><code>python run_scrapers.py --all</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#option4">
+                                    <i class="fas fa-sliders-h me-2 text-danger"></i>Option 4: Limit Pages to Scrape
+                                </button>
+                            </h2>
+                            <div id="option4" class="accordion-collapse collapse" data-bs-parent="#scraperOptions">
+                                <div class="accordion-body">
+                                    <pre class="bg-dark text-light p-3 rounded"><code>python run_scrapers.py --pages 5</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Scrapers -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold"><i class="fas fa-spider me-2 text-primary"></i>Available Scrapers</h5>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>onlinejobs</strong> <small class="text-muted">- OnlineJobs.ph</small>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>remoteok</strong> <small class="text-muted">- RemoteOK</small>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>weworkremotely</strong> <small class="text-muted">- We Work Remotely</small>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>freelancer</strong> <small class="text-muted">- Freelancer.com</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>guru</strong> <small class="text-muted">- Guru.com</small>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>peopleperhour</strong> <small class="text-muted">- PeoplePerHour</small>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>indeed</strong> <small class="text-muted">- Indeed</small>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <strong>hubstaff</strong> <small class="text-muted">- Hubstaff Talent</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- After Running -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold"><i class="fas fa-tasks me-2 text-primary"></i>After Running the Scraper</h5>
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 d-flex align-items-start">
+                                <span class="badge bg-primary rounded-circle me-3 mt-1">1</span>
+                                <span>Jobs will be saved to <code>scraped_jobs.json</code> in the parent directory</span>
+                            </div>
+                            <div class="list-group-item border-0 px-0 d-flex align-items-start">
+                                <span class="badge bg-primary rounded-circle me-3 mt-1">2</span>
+                                <span>Run <code>update_jobs.bat</code> to copy data into the jobs_flask folder</span>
+                            </div>
+                            <div class="list-group-item border-0 px-0 d-flex align-items-start">
+                                <span class="badge bg-primary rounded-circle me-3 mt-1">3</span>
+                                <span>Refresh this website to see the new jobs</span>
+                            </div>
+                            <div class="list-group-item border-0 px-0 d-flex align-items-start">
+                                <span class="badge bg-success rounded-circle me-3 mt-1">4</span>
+                                <span>No need to restart the Flask server</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Update -->
+                    <div class="alert alert-info d-flex align-items-center" role="alert">
+                        <i class="fas fa-lightbulb me-3 fs-4"></i>
+                        <div>
+                            <strong>Quick Update:</strong> Double-click <code>update_jobs.bat</code> or manually copy
+                            <code>scraped_jobs.json</code> from the parent directory into the <code>jobs_flask</code> folder.
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="/" class="btn btn-primary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Jobs
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <div class="code-block">
-                <h3>Option 2: Run Specific Scrapers</h3>
-                <pre><code>python run_scrapers.py --spiders onlinejobs remoteok freelancer</code></pre>
-            </div>
-
-            <div class="code-block">
-                <h3>Option 3: Run All Available Scrapers</h3>
-                <pre><code>python run_scrapers.py --all</code></pre>
-            </div>
-
-            <div class="code-block">
-                <h3>Option 4: Limit Pages to Scrape</h3>
-                <pre><code>python run_scrapers.py --pages 5</code></pre>
-            </div>
-        </div>
-
-        <div class="info-section">
-            <h2>Available Scrapers</h2>
-            <ul class="scraper-list">
-                <li><strong>onlinejobs</strong> - OnlineJobs.ph (Philippines remote jobs)</li>
-                <li><strong>remoteok</strong> - RemoteOK (Remote tech jobs)</li>
-                <li><strong>weworkremotely</strong> - We Work Remotely (Remote jobs)</li>
-                <li><strong>freelancer</strong> - Freelancer.com (Freelance projects)</li>
-                <li><strong>guru</strong> - Guru.com (Freelance jobs)</li>
-                <li><strong>peopleperhour</strong> - PeoplePerHour (Freelance projects)</li>
-                <li><strong>indeed</strong> - Indeed (Various jobs)</li>
-                <li><strong>hubstaff</strong> - Hubstaff Talent (Remote jobs)</li>
-            </ul>
-        </div>
-
-        <div class="info-section">
-            <h2>After Running the Scraper</h2>
-            <p>Once the scraper completes:</p>
-            <ol>
-                <li>The jobs will be saved to <code>scraped_jobs.json</code> in the parent directory</li>
-                <li>Run <code>update_jobs.bat</code> to copy the data into the jobs_flask folder</li>
-                <li>Refresh this website to see the new jobs</li>
-                <li>No need to restart the Flask server</li>
-            </ol>
-        </div>
-
-        <div class="info-section">
-            <h2>Quick Update Command</h2>
-            <div class="code-block">
-                <h3>Windows - Double click this file:</h3>
-                <pre><code>update_jobs.bat</code></pre>
-            </div>
-            <p>Or manually copy <code>scraped_jobs.json</code> from the parent directory into the <code>jobs_flask</code> folder.</p>
-        </div>
-
-        <div class="actions">
-            <a href="/" class="btn btn-primary">Back to Jobs</a>
         </div>
     </div>
 </div>
