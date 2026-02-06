@@ -136,6 +136,13 @@ def parse_date(job):
         return None
 
 
+def format_date(dt):
+    """Format a datetime into a human-readable string like 'Feb 3, 2026'."""
+    if dt is None:
+        return ''
+    return dt.strftime('%b %d, %Y').replace(' 0', ' ')
+
+
 def load_jobs():
     """Load jobs from JSON file"""
     try:
@@ -147,6 +154,7 @@ def load_jobs():
                 job['_arrangement'] = detect_arrangement(job)
                 job['_job_type'] = detect_job_type(job)
                 job['_parsed_date'] = parse_date(job)
+                job['_display_date'] = format_date(job['_parsed_date'])
                 job['_salary_monthly'] = parse_salary_monthly(job)
             return jobs
     except FileNotFoundError:
@@ -292,12 +300,17 @@ def job_detail(job_id):
     return "Job not found", 404
 
 
+def job_to_dict(job):
+    """Prepare a job dict for JSON serialization (remove non-serializable fields)."""
+    return {k: v for k, v in job.items() if k != '_parsed_date'}
+
+
 @app.route('/api/job/<int:job_id>')
 def api_job_detail(job_id):
     """API endpoint to get a single job as JSON"""
     jobs = load_jobs()
     if 0 <= job_id < len(jobs):
-        return jsonify(jobs[job_id])
+        return jsonify(job_to_dict(jobs[job_id]))
     return jsonify({'error': 'Job not found'}), 404
 
 
@@ -320,7 +333,7 @@ def api_jobs():
     return jsonify({
         'total': len(jobs),
         'filtered': len(filtered),
-        'jobs': filtered
+        'jobs': [job_to_dict(j) for j in filtered]
     })
 
 

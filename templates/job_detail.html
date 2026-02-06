@@ -102,13 +102,13 @@
                             </div>
                         </li>
                         {% endif %}
-                        {% if job.posted_date or job.date_posted %}
+                        {% if job._display_date %}
                         <li class="list-group-item">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-calendar text-secondary me-3" style="width:20px"></i>
                                 <div>
                                     <small class="text-muted d-block">Posted</small>
-                                    <span class="fw-semibold">{{ job.posted_date or job.date_posted }}</span>
+                                    <span class="fw-semibold">{{ job._display_date }}</span>
                                 </div>
                             </div>
                         </li>

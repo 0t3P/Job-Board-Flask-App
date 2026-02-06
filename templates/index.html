@@ -172,9 +172,9 @@
                             <i class="fas fa-tag me-1"></i>{{ job.category }}
                         </span>
                         {% endif %}
-                        {% if job.posted_date or job.date_posted %}
+                        {% if job._display_date %}
                         <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">
-                            <i class="fas fa-calendar me-1"></i>{{ job.posted_date or job.date_posted }}
+                            <i class="fas fa-calendar me-1"></i>{{ job._display_date }}
                         </span>
                         {% endif %}
                     </div>
@@ -324,7 +324,7 @@
         if (job.salary) meta += '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle"><i class="fas fa-dollar-sign me-1"></i>' + escapeHtml(job.salary) + '</span>';
         if (job.type) meta += '<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle"><i class="fas fa-clock me-1"></i>' + escapeHtml(job.type) + '</span>';
         if (job.category) meta += '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle"><i class="fas fa-tag me-1"></i>' + escapeHtml(job.category) + '</span>';
-        const posted = job.posted_date || job.date_posted;
+        const posted = job._display_date;
         if (posted) meta += '<span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle"><i class="fas fa-calendar me-1"></i>' + escapeHtml(posted) + '</span>';
 
         const desc = truncateWords(job.description || job.job_description || '', 30);
@@ -441,6 +441,7 @@
                 if (job.salary) meta += '<span class="badge bg-success-subtle text-success-emphasis border border-success-subtle me-2 mb-2"><i class="fas fa-dollar-sign me-1"></i>' + escapeHtml(job.salary) + '</span>';
                 if (job.type) meta += '<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle me-2 mb-2"><i class="fas fa-clock me-1"></i>' + escapeHtml(job.type) + '</span>';
                 if (job.category) meta += '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle me-2 mb-2"><i class="fas fa-tag me-1"></i>' + escapeHtml(job.category) + '</span>';
+                if (job._display_date) meta += '<span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle me-2 mb-2"><i class="fas fa-calendar me-1"></i>' + escapeHtml(job._display_date) + '</span>';
                 if (job.source) meta += '<span class="badge source-badge rounded-pill me-2 mb-2">' + escapeHtml(job.source) + '</span>';
 
                 const desc = job.job_description || job.description || '<p class="text-muted fst-italic">No description available.</p>';
