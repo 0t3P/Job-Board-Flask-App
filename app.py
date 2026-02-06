@@ -9,6 +9,7 @@ import os
 from html import unescape
 from pathlib import Path
 from datetime import datetime
+from email.utils import parsedate_to_datetime
 
 app = Flask(__name__)
 
@@ -121,15 +122,27 @@ def detect_job_type(job):
 
 def parse_date(job):
     """Parse posted_date into a naive datetime for sorting. Returns None if unparseable."""
-    raw = job.get('posted_date') or job.get('date_posted') or ''
+    raw = (job.get('posted_date') or job.get('date_posted') or '').strip()
     if not raw:
         return None
+    # ISO 8601: "2026-02-03T14:00:06+00:00"
     try:
         dt = datetime.fromisoformat(raw)
-        # Strip timezone info for consistent comparison
         return dt.replace(tzinfo=None)
     except (ValueError, TypeError):
         pass
+    # RFC 2822: "Wed, 12 Nov 2025 08:56:02 +0000" (WeWorkRemotely)
+    try:
+        dt = parsedate_to_datetime(raw)
+        return dt.replace(tzinfo=None)
+    except (ValueError, TypeError, IndexError):
+        pass
+    # Short date: "Feb 4, 2026" (OnlineJobs.ph)
+    try:
+        return datetime.strptime(raw, '%b %d, %Y')
+    except (ValueError, TypeError):
+        pass
+    # Plain date: "2026-02-03"
     try:
         return datetime.strptime(raw, '%Y-%m-%d')
     except (ValueError, TypeError):
@@ -238,11 +251,11 @@ def apply_filters(jobs, source_filter='', category_filter='', search_query='',
                     or q in (j.get('description') or '').lower()
                     or q in (j.get('job_description') or '').lower()]
 
-    # Sorting
-    if sort_by == 'newest':
-        filtered.sort(key=lambda j: j.get('_parsed_date') or datetime.min, reverse=True)
-    elif sort_by == 'oldest':
+    # Sorting (default to newest first)
+    if sort_by == 'oldest':
         filtered.sort(key=lambda j: j.get('_parsed_date') or datetime.min)
+    else:
+        filtered.sort(key=lambda j: j.get('_parsed_date') or datetime.min, reverse=True)
 
     return filtered
 
