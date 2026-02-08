@@ -260,9 +260,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="#" id="modalApplyBtn" target="_blank" rel="noopener" class="btn btn-success d-none">
-                    <i class="fas fa-external-link-alt me-1"></i>Apply for this Job
-                </a>
 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -413,7 +410,6 @@
     const jobModal = new bootstrap.Modal(document.getElementById('jobModal'));
     const modalBody = document.getElementById('jobModalBody');
     const modalLabel = document.getElementById('jobModalLabel');
-    const modalApplyBtn = document.getElementById('modalApplyBtn');
     const spinnerHtml = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
     document.addEventListener('click', (e) => {
@@ -422,7 +418,6 @@
         const jobId = btn.dataset.jobId;
         modalBody.innerHTML = spinnerHtml;
         modalLabel.textContent = 'Loading...';
-        modalApplyBtn.classList.add('d-none');
         jobModal.show();
 
         fetch('/api/job/' + jobId)
@@ -468,10 +463,6 @@
                     '</div></div>' +
                     '</div></div>';
 
-                if (job.url) {
-                    modalApplyBtn.href = job.url;
-                    modalApplyBtn.classList.remove('d-none');
-                }
             })
             .catch(() => {
                 modalBody.innerHTML = '<div class="text-center py-4 text-danger"><i class="fas fa-exclamation-triangle fa-2x mb-2"></i><p>Failed to load job details.</p></div>';
