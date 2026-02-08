@@ -304,15 +304,6 @@ def index():
                          total_pages=total_pages)
 
 
-@app.route('/job/<int:job_id>')
-def job_detail(job_id):
-    """Job detail page"""
-    jobs = load_jobs()
-    if 0 <= job_id < len(jobs):
-        return render_template('job_detail.html', job=jobs[job_id])
-    return "Job not found", 404
-
-
 def job_to_dict(job):
     """Prepare a job dict for JSON serialization (remove non-serializable fields)."""
     return {k: v for k, v in job.items() if k != '_parsed_date'}
