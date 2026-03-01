@@ -345,7 +345,10 @@ def api_jobs():
 def refresh():
     """Information page about refreshing jobs"""
     last_updated = None
-    if JOBS_FILE.exists():
+    timestamp_file = Path(__file__).parent / 'last_updated.txt'
+    if timestamp_file.exists():
+        last_updated = timestamp_file.read_text().strip()
+    elif JOBS_FILE.exists():
         mod_time = os.path.getmtime(JOBS_FILE)
         last_updated = datetime.fromtimestamp(mod_time).strftime('%B %d, %Y at %I:%M %p')
     jobs = load_jobs()
